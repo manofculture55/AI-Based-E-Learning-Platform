@@ -1,0 +1,323 @@
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    height: 100dvh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    /* Do NOT put overflow: hidden here — tooltips need to escape on tablet */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Brand mark at top */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--space-4) var(--space-4) var(--space-4);
+    text-decoration: none;
+}
+
+.brandName {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.brandAccent {
+    color: var(--accent);
+}
+
+/* Nav list */
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+    margin-top: var(--space-4);
+    flex: 1;
+    /* Pushes bottom section down */
+}
+
+/* Nav Link */
+.link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    /* Global transition covers background/color */
+}
+
+.link:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+/* Active State */
+.active {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.active:hover {
+    background: var(--accent-dim);
+    /* Prevent hover overriding active */
+}
+
+/* The vertical accent bar on active links */
+.active::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    /* Outside the padding so it touches the sidebar edge */
+    top: 15%;
+    height: 70%;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+}
+
+.icon {
+    flex-shrink: 0;
+}
+
+/* ── Bottom Section (Toggle + User) ── */
+.bottomSection {
+    padding: var(--space-4) var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    border-top: 1px solid var(--border);
+    background: var(--bg-surface);
+}
+
+/* ── User Profile List Item ── */
+.userSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    position: relative;
+    /* Optional hover effect on the whole user row */
+    transition: background-color 150ms ease;
+}
+
+.userSection:hover {
+    background: var(--bg-hover);
+}
+
+.avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.username {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logoutBtn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.logoutBtn:hover {
+    color: var(--error);
+    background: rgba(239, 68, 68, 0.1);
+    /* Assuming error is redish */
+}
+
+/* ── Tablet Icon-Only Sidebar ── */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .brand {
+        padding: var(--space-4) var(--space-3);
+        justify-content: center;
+    }
+
+    .brandName {
+        display: none;
+    }
+
+    .link {
+        padding: 10px;
+        justify-content: center;
+        gap: 0;
+        position: relative;
+        /* remove gap */
+    }
+
+    /* Keep the icon colored but hide the text node. Since text is not wrapped in span, we can color text transparent but keep icon colored. */
+    .link {
+        color: transparent;
+    }
+
+    .link .icon {
+        color: var(--text-secondary);
+    }
+
+    .active .icon {
+        color: var(--accent);
+    }
+
+    .link:hover .icon {
+        color: var(--text-primary);
+    }
+
+    /* Tooltip on hover showing label */
+    .link::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 70px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 4px 10px;
+        font-size: 12px;
+        color: var(--text-primary);
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 120ms ease;
+        z-index: 200;
+    }
+
+    .link:hover::after {
+        opacity: 1;
+    }
+
+    .username {
+        display: none;
+    }
+
+    .bottomSection {
+        padding: var(--space-2) 0;
+        align-items: center;
+    }
+
+    .userSection {
+        padding: var(--space-2) 0;
+        flex-direction: column;
+    }
+
+    .logoutBtn {
+        margin-top: 4px;
+    }
+}
+
+/* Mobile: bottom tab bar */
+@media (max-width: 640px) {
+    .sidebar {
+        width: 100%;
+        height: 56px;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        flex-direction: row;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        overflow: visible;
+        z-index: 1000;
+    }
+
+    .brand {
+        display: none;
+    }
+
+    /* Hide brand on mobile */
+
+    .nav {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        margin-top: 0;
+        gap: 0;
+        flex: 1;
+    }
+
+    .link {
+        flex-direction: column;
+        gap: 3px;
+        padding: 6px 12px;
+        font-size: 10px;
+        border-radius: 0;
+        flex: 1;
+        justify-content: center;
+        color: var(--text-secondary);
+    }
+
+    /* Text is technically mixed. Hide text trick: */
+    .link {
+        color: transparent;
+        font-size: 0;
+    }
+
+    .link .icon {
+        color: var(--text-secondary);
+    }
+
+    .active .icon {
+        color: var(--accent);
+    }
+
+    /* Hide text labels on mobile — icons only */
+    .link span {
+        display: none;
+    }
+
+    .active::before {
+        display: none;
+    }
+
+    /* Remove left bar on mobile */
+
+    .bottomSection {
+        display: none;
+    }
+
+    /* Hide theme toggle + user on mobile */
+}

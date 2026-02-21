@@ -1,0 +1,65 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+}
+
+.label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    user-select: none;
+}
+
+/* The outer pill track */
+.track {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    /* Override global transition — the track and knob have their own */
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+
+/* Track colour when dark mode is ON */
+.trackDark {
+    background: var(--accent-dim);
+    /* Subtle inner border so it doesn't disappear on AMOLED */
+    box-shadow: inset 0 0 0 1px rgba(162, 60, 220, 0.3);
+}
+
+/* Track colour when light mode is ON */
+.trackLight {
+    background: var(--border);
+}
+
+/* The sliding knob */
+.knob {
+    position: absolute;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    /* Icon inside fades in */
+}
+
+/* Knob position LEFT (light mode) */
+.knobLeft {
+    transform: translateX(3px);
+}
+
+/* Knob position RIGHT (dark mode) */
+.knobRight {
+    transform: translateX(23px);
+}

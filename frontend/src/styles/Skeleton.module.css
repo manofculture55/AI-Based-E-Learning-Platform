@@ -1,0 +1,5 @@
+/* Placeholder for Skeleton styles */
+.skeleton {
+    background: var(--bg-hover);
+    border-radius: var(--radius-md);
+}

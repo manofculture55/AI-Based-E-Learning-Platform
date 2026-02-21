@@ -1,0 +1,196 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(ellipse at top, var(--accent-dim) 0%, var(--bg) 60%);
+}
+
+:global([data-theme="light"]) .page {
+  background: var(--bg);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  /* Shadow only in light mode via global override, but we can set specific here if needed */
+  box-shadow: var(--shadow-card);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.logo h1 span {
+  color: var(--accent);
+}
+
+.logo p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.field input {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: border-color var(--transition);
+  outline: none;
+}
+
+.field input:focus {
+  border-color: var(--border-focus);
+}
+
+.field input::placeholder {
+  color: var(--text-secondary);
+  /* Using muted for placeholder to be subtler than secondary */
+}
+
+.error {
+  background: rgba(255, 77, 106, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 0.875rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  width: 100%;
+  /* For full-width form buttons */
+  /* Own transition — faster than global 200ms */
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+  transition-duration: 80ms;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* When button is loading: show spinner inside */
+.btn .spinner {
+  width: 16px;
+  height: 16px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.footer a {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Light theme override for auth card is handled by var(--bg-card) now, so strict override only if needed */
+:global([data-theme="light"]) .card {
+  box-shadow: var(--shadow-lg);
+  /* Special shadow for auth card in light mode as per spec */
+}
+
+/* Password visibility toggle */
+.passwordField {
+  position: relative;
+}
+
+.passwordField input {
+  padding-right: 42px;
+}
+
+/* Hide native browser password reveal button */
+.passwordField input::-ms-reveal,
+.passwordField input::-ms-clear {
+  display: none;
+}
+
+.passwordField input::-webkit-credentials-auto-fill-button,
+.passwordField input::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  padding: 4px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color var(--transition);
+}
+
+.eyeBtn:hover {
+  color: var(--text-primary);
+}

@@ -1,0 +1,906 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+.orbWrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto var(--space-8) auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The ultra-realistic 3D Sci-Fi Pearl */
+.orb {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  /* Beautifully smooth multi-radial gradient for maximum depth */
+  background: radial-gradient(circle at 30% 25%,
+      #ffffff 0%,
+      #f2dcfc 12%,
+      #c46df2 35%,
+      #8c26c1 65%,
+      #3f095e 100%);
+  box-shadow:
+    /* The glowing aura radiating outwards */
+    0 0 35px rgba(196, 109, 242, 0.5),
+    /* Deep internal shadow at the bottom to give solid weight */
+    inset -10px -15px 25px rgba(0, 0, 0, 0.6),
+    /* Purple ambient bounce reflection from the floor onto the underside */
+    inset 12px -8px 20px rgba(196, 109, 242, 0.5),
+    /* Super bright white rim light on the top edge */
+    inset 4px 8px 15px rgba(255, 255, 255, 0.9),
+    /* Overall global glass rim reflection */
+    inset 0 0 8px rgba(255, 255, 255, 0.3);
+  /* The orb floats up and down gently */
+  animation: pearlBounce 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Hard specular highlight on the glossy surface */
+.orb::before {
+  content: '';
+  position: absolute;
+  top: 12%;
+  left: 20%;
+  width: 45%;
+  height: 25%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 65%);
+  transform: rotate(-35deg);
+  pointer-events: none;
+}
+
+/* Floor shadow that reacts physically to the bouncing orb */
+.orbShadow {
+  position: absolute;
+  bottom: -22px;
+  left: 15%;
+  width: 70%;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(140, 38, 193, 0.7);
+  filter: blur(10px);
+  z-index: 1;
+  animation: shadowPulse 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes pearlBounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes shadowPulse {
+
+  /* When orb is at bottom (0%), shadow is wide and opaque */
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  /* When orb is high (50%), shadow shrinks and fades */
+  50% {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+}
+
+/* Hero Section */
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: var(--space-12);
+  padding-bottom: var(--space-6);
+  /* Smooth entrance on page load */
+  animation: pageEnter 350ms ease-out both;
+
+  /* Normal state: make sure transition applies to normal state too so it can animate both ways */
+  max-height: 600px;
+  /* Large enough to fit hero content */
+  transition: opacity 800ms ease-in-out, transform 800ms ease-in-out, max-height 1000ms ease-in-out, padding 800ms ease-in-out, margin 800ms ease-in-out;
+}
+
+/* When chat starts, fade out and slide up the hero */
+.heroHidden {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+  /* Use max-height transition to make the section collapse and not leave a gap */
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  transition: opacity 600ms ease-in-out, transform 600ms ease-in-out, max-height 900ms ease-in-out, padding 600ms ease-in-out, margin 600ms ease-in-out;
+}
+
+.greetingTitle {
+  font-size: 34px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px 0;
+}
+
+.greetingSubtitle {
+  font-size: 34px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-8) 0;
+}
+
+.greetingAccent {
+  /* Vibrant gradient for "your mind?" */
+  background: linear-gradient(135deg, #A23CDC 0%, #DF80FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Prompt Box */
+/* Outer wrapper that shifts position when chat starts */
+.promptContainer {
+  width: 100%;
+  max-width: 850px;
+  /* Widened from 720px */
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  /* By default, prompt is part of the normal page flow */
+}
+
+.promptContainerChat {
+  /* Sticky bar pinned to bottom of the scrollable .page */
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: 12px 0 var(--space-4) 0;
+  background: linear-gradient(to top, var(--bg) 60%, transparent);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Inner wrapper to constrain the prompt box width */
+.promptContainerChat .promptBox {
+  max-width: 850px;
+  width: calc(100% - var(--space-8));
+}
+
+.promptContainerChat>* {
+  pointer-events: auto;
+}
+
+.homeBtnWrapper {
+  position: absolute;
+  top: var(--space-6);
+  left: var(--space-6);
+  z-index: 50;
+  animation: fadeIn 300ms ease-out both;
+}
+
+.homeBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+  box-shadow: var(--shadow-md);
+}
+
+.homeBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.homeBtn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.promptBox {
+  width: 100%;
+  background: color-mix(in srgb, var(--bg-card) 40%, transparent);
+  backdrop-filter: blur(60px) saturate(180%);
+  -webkit-backdrop-filter: blur(60px) saturate(180%);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 12%, transparent);
+  border-radius: 22px;
+  position: relative;
+  padding: 14px 14px 10px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: all 320ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.30),
+    0 2px 8px rgba(0, 0, 0, 0.18),
+    inset 0 1.5px 0 color-mix(in srgb, white 20%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, black 20%, transparent);
+}
+
+.promptBox:focus-within,
+.promptBox:hover {
+  background: color-mix(in srgb, var(--bg-card) 55%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.22),
+    0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent),
+    inset 0 1.5px 0 color-mix(in srgb, white 24%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, black 22%, transparent);
+  transform: translateY(-2px);
+}
+
+
+/* Apple glass specular top-edge sheen */
+.promptBox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      color-mix(in srgb, white 30%, transparent) 30%,
+      color-mix(in srgb, white 55%, transparent) 50%,
+      color-mix(in srgb, white 30%, transparent) 70%,
+      transparent 100%);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* Light mode glass — lighter, more translucent */
+[data-theme="light"] .promptBox {
+  background: color-mix(in srgb, white 55%, transparent);
+  backdrop-filter: blur(60px) saturate(160%);
+  -webkit-backdrop-filter: blur(60px) saturate(160%);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.06),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .promptBox:focus-within,
+[data-theme="light"] .promptBox:hover {
+  background: color-mix(in srgb, white 70%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow:
+    0 6px 30px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+}
+
+.promptTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 26px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0;
+  /* Ensure global.css input styles don't add padding/height */
+  height: auto;
+}
+
+/* Override global.css focus-visible so we don't get a double box */
+.promptTextarea:focus,
+.promptTextarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.promptTextarea::placeholder {
+  color: var(--text-disabled);
+}
+
+.promptActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  min-height: 40px;
+}
+
+/* Send button always anchored to the right */
+.promptActions .sendBtn {
+  margin-left: auto;
+}
+
+/* --- FILTER MENU PORTION --- */
+.promptActionsLeft {
+  display: flex;
+  align-items: center;
+}
+
+.filterWrapper {
+  position: relative;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--bg-surface) 50%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.filterBtn:hover {
+  background: color-mix(in srgb, var(--bg-surface) 80%, transparent);
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--border) 100%, transparent);
+  transform: translateY(-1px);
+}
+
+.filterBtnActive {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  color: var(--accent);
+}
+
+.filterMenu {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 0;
+  width: 260px;
+  /* Slightly wider */
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 9999;
+  /* Crucial to put this over EVERYTHING else */
+  animation: slideUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.filterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.closeFilter {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+.closeFilter:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.filterRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filterRow label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.filterRow select,
+.filterRow input {
+  width: 100%;
+  box-sizing: border-box;
+  /* Ensure padding doesn't push width out */
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 200ms ease;
+  height: 38px;
+  /* Consistent height for both */
+}
+
+.filterRow select:focus,
+.filterRow input:focus {
+  border-color: var(--accent);
+}
+
+/* --- END FILTER MENU PORTION --- */
+
+.sendBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  transition: all 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.sendBtn:hover:not(:disabled) {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.sendBtn:active:not(:disabled) {
+  transform: scale(0.95);
+  transition-duration: 100ms;
+}
+
+.sendBtn:disabled {
+  opacity: 0.5;
+  background: color-mix(in srgb, var(--bg-surface) 60%, transparent);
+  color: var(--text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Suggestion Chips */
+.chipsLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: var(--space-12) 0 var(--space-3) 0;
+  text-align: center;
+}
+
+.chipsContainer {
+  width: 100%;
+  max-height: 200px;
+  transition: opacity 800ms ease-in-out, transform 800ms ease-in-out, max-height 1000ms ease-in-out, padding 800ms ease-in-out, margin 800ms ease-in-out;
+}
+
+.chipsHidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  transition: opacity 600ms ease-in-out, transform 600ms ease-in-out, max-height 900ms ease-in-out;
+}
+
+.chips {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  /* Allow horizontal scrolling on small screens */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  /* Hide scrollbar visually but keep functionality */
+  scrollbar-width: none;
+  padding-bottom: var(--space-2);
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex: 1;
+  min-width: 140px;
+  min-height: 80px;
+  padding: var(--space-3) var(--space-3);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  /* Text at top, icon at bottom-left */
+  justify-content: space-between;
+  align-items: flex-start;
+  text-align: left;
+  scroll-snap-align: start;
+  /* Override global transition; chips need their own */
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+
+.chip:hover {
+  background: var(--bg-hover);
+  border-color: rgba(162, 60, 220, 0.4);
+  /* var(--accent) at 40% opacity */
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.chip:active {
+  transform: translateY(0);
+  transition-duration: 80ms;
+}
+
+.chipText {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.4;
+  /* Limit to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.chipIcon {
+  color: var(--text-secondary);
+  margin-top: var(--space-2);
+  flex-shrink: 0;
+}
+
+.chatArea {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  /* Bottom padding so last message clears the fixed prompt box */
+  padding: var(--space-8) var(--space-4) 180px var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  animation: pageEnter 400ms ease-out both;
+  animation-delay: 200ms;
+  /* Scrolling is handled by .page, not here */
+}
+
+/* USER message bubble */
+.userMessage {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.userContent {
+  background: var(--accent-dim);
+  border: 1px solid rgba(162, 60, 220, 0.2);
+  border-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-sm);
+  /* Gives "chat bubble" feel */
+  padding: var(--space-3) var(--space-4);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-primary);
+  max-width: 75%;
+  line-height: 1.6;
+  margin: 0;
+  /* Slide in from right */
+  animation: slideInRight 250ms ease-out both;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ASSISTANT message — full width, no bubble */
+.assistantMessage {
+  display: flex;
+  justify-content: flex-start;
+  /* Slide up on appearance */
+  animation: slideUp 300ms ease-out both;
+}
+
+.assistantContent {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  max-width: 100%;
+  /* Markdown styles inside */
+}
+
+/* Styles for ReactMarkdown rendered inside assistantContent */
+.assistantContent h1,
+.assistantContent h2,
+.assistantContent h3 {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: var(--space-4) 0 var(--space-2) 0;
+  line-height: 1.3;
+}
+
+.assistantContent h1 {
+  font-size: 20px;
+}
+
+.assistantContent h2 {
+  font-size: 18px;
+}
+
+.assistantContent h3 {
+  font-size: 16px;
+}
+
+.assistantContent p {
+  margin: 0 0 var(--space-3) 0;
+}
+
+.assistantContent ul,
+.assistantContent ol {
+  margin: var(--space-4) 0 var(--space-4) 0;
+  padding-left: var(--space-6);
+  color: var(--text-primary);
+}
+
+.assistantContent li {
+  margin-bottom: var(--space-2);
+  line-height: 1.6;
+}
+
+.assistantContent li::marker {
+  color: var(--accent);
+}
+
+.assistantContent strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.assistantContent code {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background: var(--bg-hover);
+  color: var(--accent-hover);
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+/* Adaptive Light/Dark Mode Code Blocks */
+.assistantContent pre {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: var(--space-6) 0;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.assistantContent pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  text-shadow: none;
+}
+
+/* Three-dot typing indicator */
+.typingIndicator {
+  display: flex;
+  gap: 5px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: fit-content;
+}
+
+.typingIndicator span {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: var(--text-secondary);
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+
+.typingIndicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typingIndicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+/* Dashboard Styles (Phase 20) */
+.dashboard {
+  width: 100%;
+  max-width: 720px;
+  margin: var(--space-12) auto 0;
+  padding: 0 var(--space-4);
+  /* Fade in */
+  animation: pageEnter 400ms ease-out both;
+  animation-delay: 100ms;
+  /* Add smooth transition for when it vanishes */
+  max-height: 1200px;
+  transition: opacity 800ms ease-in-out, transform 800ms ease-in-out, max-height 1000ms ease-in-out, padding 800ms ease-in-out, margin 800ms ease-in-out;
+}
+
+/* Synchronized vanishing animation alongside Hero */
+.dashboardHidden {
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  transition: opacity 600ms ease-in-out, transform 600ms ease-in-out, max-height 900ms ease-in-out;
+}
+
+.dashboardSection {
+  margin-bottom: var(--space-8);
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-4);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.recentItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color 150ms ease, background-color 150ms ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.recentItem:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-focus);
+}
+
+.recentIconWrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.recentContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.recentTopic {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recentDate {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
